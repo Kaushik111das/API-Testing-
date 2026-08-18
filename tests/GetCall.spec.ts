@@ -41,7 +41,7 @@ test('Testing GET API', async ({ request }) => {
 
     // Verify JSON response
     //   expect(responseJson.id).toBe(1);
-    expect(responseJson.id).toBe(0);
+    // expect(responseJson.id).toBe(0);
     expect(responseJson.id).toBe(1)
     //   expect(responseJson.userId).toBe(1);
     expect(responseJson.userId).toBe(1);
