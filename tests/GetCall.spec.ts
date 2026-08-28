@@ -1,5 +1,9 @@
 import { test, expect, APIResponse } from '@playwright/test';
 
+
+test.use({
+    ignoreHTTPSErrors: true
+});
 test('Testing GET API', async ({ request }) => {
 
     // Send GET request
@@ -8,8 +12,8 @@ test('Testing GET API', async ({ request }) => {
     //     'https://jsonplaceholder.typicode.com/posts/1'
     // );
 
-    const response : APIResponse = await request.get(
-        'https://jsonplaceholder.typicode.com/posts/1'
+    const response: APIResponse = await request.get(
+        "https://jsonplaceholder.typicode.com/posts/1"
     );
 
     // Get response body as Buffer

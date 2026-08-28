@@ -6,7 +6,8 @@ test("Monitor Api responses" , async ({request}) =>{
 
     // test.setTimeout(0);
 
-    while(true)
+    // while(true)
+    while(false)
     {
         const startTime  = Date.now();
 

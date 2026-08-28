@@ -11,7 +11,7 @@ test("delete call ", async function ({ request }) {
 
     const res: APIResponse = await request.post("https://restful-booker.herokuapp.com/auth", { headers: { "Content-Type": "application/json" }, data: authData });
     const resJson = await res.json();
-    // console.log(resJson);
+    console.log(resJson);
 
     const authToken = resJson.token;
     console.log("Token is " + authToken);
@@ -51,4 +51,5 @@ test("delete call ", async function ({ request }) {
     console.log("Checking the status after performing delete operation using GetCall ")
     console.log(getRes.status());
     console.log(getRes.statusText());
+    
 })

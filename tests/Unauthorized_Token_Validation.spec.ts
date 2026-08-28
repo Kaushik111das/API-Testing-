@@ -1,3 +1,8 @@
+// Validate response when user pass invalid token data.... 401 (unauth)
+
+
+
+
 import { test, expect, APIResponse } from "@playwright/test";
 
 
@@ -8,14 +13,33 @@ test(" This is a PutPatchCall ", async function ({ request }) {
 
     const authData: any = {
         "username": "admin",
-        "password": "password123"
+        "password": "password12"
+        // "password": "password123"
     }
 
     const res: APIResponse = await request.post("https://restful-booker.herokuapp.com/auth", { headers: { "Content-Type": "application/json" }, data: authData });
     const resJson = await res.json();
     console.log(resJson);
+    const sts = res.status();
+    const ststext = res.statusText();
 
-    const authToken = resJson.token;
+    console.log("status code is " + sts);
+    console.log("Status text is : " + ststext);
+
+
+    const str = "Bad credentials";
+    if(resJson.reason == str)
+    {
+
+        expect(sts).toBe(200);
+        expect(resJson.reason).toBe("Bad credentials");
+    }
+
+
+    
+    const authToken = resJson.token + '1234';
+    // const authToken = resJson.token;
+    // const authToken = resJson.reason;
     console.log("Token is " + authToken);
 
     const newBookingData = {
@@ -50,26 +74,25 @@ test(" This is a PutPatchCall ", async function ({ request }) {
 
     const updatedRes: APIResponse = await request.put("https://restful-booker.herokuapp.com/booking/" + bookingId, { headers: { "Content-Type": "application/json", "Accept": "application/json", "Cookie": "token=" + authToken }, data: updatedData });
 
-    const updatedResJson = await updatedRes.json();
-    console.log(updatedResJson)
+    // const updatedResJson = await updatedRes.json();
+    // console.log(updatedResJson)
+    const stsRes = updatedRes.status();
+    const stsRestext = updatedRes.statusText();
 
+    console.log(stsRes);
+    console.log(stsRestext);
 
-    // --------------------
-    const getRes: APIResponse = await request.get("https://restful-booker.herokuapp.com/booking/" + bookingId)
+    if (stsRes === 403) {
 
-    console.log("Checking the status after performing delete operation using GetCall ")
-    console.log(getRes.status());
-    console.log(getRes.statusText());
+        expect(stsRes).toBe(403);
+        expect(stsRestext).toBe('Forbidden');
+    }
+    else {
+        expect(stsRes).toBe(404);
+        expect(stsRestext).toBe('Unauthorized');
 
-    const d = await getRes.json();
-    console.log(d)
+    }
 
-    expect(updatedResJson.firstname).toBe(updatedData.firstname)
-    expect(updatedResJson.lastname).toBe(updatedData.lastname)
-    expect(updatedResJson.totalprice).toBe(updatedData.totalprice)
-    expect(updatedResJson.depositpaid).toBe(updatedData.depositpaid)
-    // expect(updatedResJson.bookingdates).toBe(updatedData.bookingdates) // validating obj to obj is not possible 
-    expect(updatedResJson.bookingdates.checkin).toBe(updatedData.bookingdates.checkin) 
 
 
 })
